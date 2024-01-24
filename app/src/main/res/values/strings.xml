@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">ToDoList</string>
+    <string name="titulo">Mis Tareas</string>
+    <string name="hintCorreo">email</string>
+    <string name="hintPass">Password</string>
+    <string name="login">Login</string>
+    <string name="registro">Registrar</string>
+    <string name="mas">mas</string>
+    <string name="logout">logout</string>
+    <string name="tarea">Tarea</string>
+    <string name="done">Done</string>
+</resources>

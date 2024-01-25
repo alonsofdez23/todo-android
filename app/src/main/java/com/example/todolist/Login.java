@@ -41,13 +41,22 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // login en Firebase
-                try {
-                    Intent intent = new Intent(Login.this, MainActivity.class);
-                    startActivity(intent);
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
+                String email = emailText.getText().toString();
+                String password = passText.getText().toString();
 
+                mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success
+                                startActivity(new Intent(Login.this, MainActivity.class));
+                            } else {
+                                // If sign in fails, display a message to the user
+                                Toast.makeText(Login.this, "Login erroneo", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
             }
         });
 
@@ -71,7 +80,7 @@ public class Login extends AppCompatActivity {
                                 startActivity(intent);
                             } else {
                                 // If sign in fails, display a message to the user
-                                Toast.makeText(Login.this, "Login incorrecto", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(Login.this, email + " ya existe", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

@@ -1,6 +1,7 @@
 package com.example.todolist;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,7 +19,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         idUser = mAuth.getCurrentUser().getUid();
 
         listViewTareas = findViewById(R.id.listTareas);
+
+        actualizarUI();
     }
 
     @Override
@@ -105,5 +112,36 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void actualizarUI() {
+        db.collection("Tareas")
+                .whereEqualTo("idUsuario", idUser) // Solo las tareas del usuario logueado
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            return;
+                        }
+
+                        // Limpiar las listas
+                        listaIDTareas.clear();
+                        listaTareas.clear();
+
+                        // Rellena las listas con lso datos de los documentos de la base de datos
+                        for (QueryDocumentSnapshot doc : value) {
+                            listaIDTareas.add(doc.getId());
+                            listaTareas.add(doc.getString("nombreTarea"));
+                        }
+
+                        // Rellena el listView con las listas
+                        if (listaTareas.size() == 0) {
+                            listViewTareas.setAdapter(null);
+                        } else {
+                            mAdapterTareas = new ArrayAdapter<>(MainActivity.this, R.layout.item_tarea, R.id.textViewTarea, listaTareas);
+                            listViewTareas.setAdapter(mAdapterTareas);
+                        }
+                    }
+                });
     }
 }

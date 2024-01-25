@@ -10,9 +10,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -143,5 +145,16 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    public void borrarTarea(View view) {
+        View parent = (View) view.getParent();
+        TextView tareaTextView = parent.findViewById(R.id.textViewTarea);
+        String tarea = tareaTextView.getText().toString();
+        int posicion = listaTareas.indexOf(tarea);
+
+        db.collection("Tareas").document(listaIDTareas.get(posicion)).delete();
+
+        Toast.makeText(this, tarea + " borrado", Toast.LENGTH_SHORT).show();
     }
 }

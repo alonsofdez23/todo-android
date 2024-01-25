@@ -12,12 +12,18 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class MainActivity extends AppCompatActivity {
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Inicializar Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -50,8 +56,9 @@ public class MainActivity extends AppCompatActivity {
 
         } else if (item.getItemId() == R.id.logout) {
             // cierre de sesión de Firebase
-
+            mAuth.signOut();
             startActivity(new Intent(MainActivity.this, Login.class));
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);

@@ -20,7 +20,6 @@ public class Login extends AppCompatActivity {
     Button botonLogin;
     TextView botonRegistro;
     private FirebaseAuth mAuth;
-    
     EditText emailText, passText;
 
     @Override

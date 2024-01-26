@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,19 +44,27 @@ public class Login extends AppCompatActivity {
                 String email = emailText.getText().toString();
                 String password = passText.getText().toString();
 
-                mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Sign in success
-                                startActivity(new Intent(Login.this, MainActivity.class));
-                            } else {
-                                // If sign in fails, display a message to the user
-                                Toast.makeText(Login.this, "Login erroneo", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+                if (email.isEmpty()) {
+                    emailText.setError("campo obligatorio");
+                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    emailText.setError("email incorrecto");
+                } else if (password.length() < 6) {
+                    passText.setError("mínimo 6 caracteres");
+                } else {
+                    mAuth.signInWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        // Sign in success
+                                        startActivity(new Intent(Login.this, MainActivity.class));
+                                    } else {
+                                        // If sign in fails, display a message to the user
+                                        Toast.makeText(Login.this, "Login erroneo", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                }
             }
         });
 

@@ -6,7 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -83,7 +86,8 @@ public class Login extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // Sign in successs, update UI with the signed-in user's information
-                                Toast.makeText(Login.this, "Usuario registrado", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(Login.this, "Usuario registrado", Toast.LENGTH_SHORT).show();
+                                toastOk(email + " registrado");
                                 Intent intent = new Intent(Login.this, MainActivity.class);
                                 startActivity(intent);
                             } else {
@@ -94,5 +98,18 @@ public class Login extends AppCompatActivity {
                     });
             }
         });
+    }
+
+    public void toastOk(String msg) {
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View view = layoutInflater.inflate(R.layout.custom_toast_ok, (ViewGroup) findViewById(R.id.llCustomToastOk));
+        TextView txtMensaje = view.findViewById(R.id.txtMensajeToast1);
+        txtMensaje.setText(msg);
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.BOTTOM, 0, 200);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(view);
+        toast.show();
     }
 }

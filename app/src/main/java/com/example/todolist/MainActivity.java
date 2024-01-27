@@ -22,10 +22,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -80,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
             final EditText taskEditText = new EditText(this);
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setTitle("Nueva tarea")
-                    .setMessage("¿Qué quieres hacer a continuación")
+                    .setMessage("¿Qué quieres hacer a continuación?")
                     .setView(taskEditText)
                     .setPositiveButton("Añadir", new DialogInterface.OnClickListener() {
                         @Override
@@ -167,6 +170,56 @@ public class MainActivity extends AppCompatActivity {
         toastOk(tarea + " completada");
     }
 
+    public void editarTarea(View view) {
+        View parent = (View) view.getParent();
+        TextView tareaTextView = parent.findViewById(R.id.textViewTarea);
+        String tarea = tareaTextView.getText().toString();
+        int posicion = listaTareas.indexOf(tarea);
+
+        DocumentReference tareaRef = db.collection("Tareas").document(listaIDTareas.get(posicion));
+
+        tareaRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        String valorTask = document.getString("nombreTarea");
+
+                        final EditText taskEditText = new EditText(MainActivity.this);
+                        taskEditText.setText(valorTask);
+                        AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
+                                .setTitle("Editar tarea")
+                                .setMessage("¿Qué quieres hacer a continuación?")
+                                .setView(taskEditText)
+                                .setPositiveButton("Editar", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        tareaRef
+                                                .update("nombreTarea", taskEditText.getText().toString())
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void unused) {
+                                                        Toast.makeText(MainActivity.this, "Tarea editada", Toast.LENGTH_SHORT). show();
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Toast.makeText(MainActivity.this, "Fallo al editar la tarea", Toast.LENGTH_SHORT). show();
+                                                    }
+                                                });
+                                    }
+                                })
+                                .setNegativeButton("Cancelar", null)
+                                .create();
+                        dialog.show();
+                    }
+                }
+            }
+        });
+    }
+
     public void toastOk(String msg) {
         LayoutInflater layoutInflater = getLayoutInflater();
         View view = layoutInflater.inflate(R.layout.custom_toast_ok, (ViewGroup) findViewById(R.id.llCustomToastOk));
@@ -175,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
 
         Toast toast = new Toast(getApplicationContext());
         toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.BOTTOM, 0, 200);
-        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setDuration(Toast.LENGTH_SHORT);
         toast.setView(view);
         toast.show();
     }

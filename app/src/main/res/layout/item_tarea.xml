@@ -31,4 +31,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="120dp"
+        android:text="Edit"
+        app:icon="@drawable/baseline_edit_24"
+        android:textSize="16sp"
+        android:onClick="editarTarea"
+        app:layout_constraintEnd_toEndOf="@id/buttonDone"
+        app:layout_constraintTop_toTopOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

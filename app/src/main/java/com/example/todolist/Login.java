@@ -108,24 +108,32 @@ public class Login extends AppCompatActivity {
                 
                 String email = emailText.getText().toString();
                 String password = passText.getText().toString();
-                
-                mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Sign in successs, update UI with the signed-in user's information
-                                //Toast.makeText(Login.this, "Usuario registrado", Toast.LENGTH_SHORT).show();
-                                toastOk(email + " registrado");
-                                Intent intent = new Intent(Login.this, MainActivity.class);
-                                startActivity(intent);
-                            } else {
-                                // If sign in fails, display a message to the user
-                                toastError(email + " ya existe");
-                                //Toast.makeText(Login.this, email + " ya existe", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+
+                if (email.isEmpty()) {
+                    emailText.setError("campo obligatorio");
+                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    emailText.setError("email incorrecto");
+                } else if (password.length() < 6) {
+                    passText.setError("mínimo 6 caracteres");
+                } else {
+                    mAuth.createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        // Sign in successs, update UI with the signed-in user's information
+                                        //Toast.makeText(Login.this, "Usuario registrado", Toast.LENGTH_SHORT).show();
+                                        toastOk(email + " registrado");
+                                        Intent intent = new Intent(Login.this, MainActivity.class);
+                                        startActivity(intent);
+                                    } else {
+                                        // If sign in fails, display a message to the user
+                                        toastError(email + " ya existe");
+                                        //Toast.makeText(Login.this, email + " ya existe", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                }
             }
         });
     }

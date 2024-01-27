@@ -2,6 +2,8 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.ToDoList" parent="Theme.Material3.Light">
         <!-- Customize your light theme here. -->
+        <item name="colorPrimary">@color/main</item>
+        <item name="colorSecondary">@color/secondary</item>
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 

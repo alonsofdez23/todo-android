@@ -60,10 +60,12 @@ public class Login extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
                                         // Sign in success
+                                        toastOk("Bienvenido " + email);
                                         startActivity(new Intent(Login.this, MainActivity.class));
                                     } else {
                                         // If sign in fails, display a message to the user
-                                        Toast.makeText(Login.this, "Login erroneo", Toast.LENGTH_SHORT).show();
+                                        toastError("Login incorrecto");
+                                        //Toast.makeText(Login.this, "Login erroneo", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -92,7 +94,8 @@ public class Login extends AppCompatActivity {
                                 startActivity(intent);
                             } else {
                                 // If sign in fails, display a message to the user
-                                Toast.makeText(Login.this, email + " ya existe", Toast.LENGTH_SHORT).show();
+                                toastError(email + " ya existe");
+                                //Toast.makeText(Login.this, email + " ya existe", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -104,6 +107,19 @@ public class Login extends AppCompatActivity {
         LayoutInflater layoutInflater = getLayoutInflater();
         View view = layoutInflater.inflate(R.layout.custom_toast_ok, (ViewGroup) findViewById(R.id.llCustomToastOk));
         TextView txtMensaje = view.findViewById(R.id.txtMensajeToast1);
+        txtMensaje.setText(msg);
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.BOTTOM, 0, 200);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(view);
+        toast.show();
+    }
+
+    public void toastError(String msg) {
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View view = layoutInflater.inflate(R.layout.custom_toast_error, (ViewGroup) findViewById(R.id.llCustomToastError));
+        TextView txtMensaje = view.findViewById(R.id.txtMensajeToast2);
         txtMensaje.setText(msg);
 
         Toast toast = new Toast(getApplicationContext());

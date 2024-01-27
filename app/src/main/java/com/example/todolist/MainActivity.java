@@ -101,13 +101,15 @@ public class MainActivity extends AppCompatActivity {
                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                     @Override
                                     public void onSuccess(DocumentReference documentReference) {
-                                        Toast.makeText(MainActivity.this, "Tarea añadida", Toast.LENGTH_SHORT). show();
+                                        toastOk("Tarea añadida");
+                                        //Toast.makeText(MainActivity.this, "Tarea añadida", Toast.LENGTH_SHORT). show();
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(MainActivity.this, "Fallo al crear la tarea", Toast.LENGTH_SHORT). show();
+                                        toastError("Fallo al crear la tarea");
+                                        //Toast.makeText(MainActivity.this, "Fallo al crear la tarea", Toast.LENGTH_SHORT). show();
                                     }
                                 });
                         }
@@ -200,13 +202,15 @@ public class MainActivity extends AppCompatActivity {
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void unused) {
-                                                        Toast.makeText(MainActivity.this, "Tarea editada", Toast.LENGTH_SHORT). show();
+                                                        toastOk("Tarea editada");
+                                                        //Toast.makeText(MainActivity.this, "Tarea editada", Toast.LENGTH_SHORT). show();
                                                     }
                                                 })
                                                 .addOnFailureListener(new OnFailureListener() {
                                                     @Override
                                                     public void onFailure(@NonNull Exception e) {
-                                                        Toast.makeText(MainActivity.this, "Fallo al editar la tarea", Toast.LENGTH_SHORT). show();
+                                                        toastError("Fallo al editar la tarea");
+                                                        //Toast.makeText(MainActivity.this, "Fallo al editar la tarea", Toast.LENGTH_SHORT). show();
                                                     }
                                                 });
                                     }
@@ -229,6 +233,19 @@ public class MainActivity extends AppCompatActivity {
         Toast toast = new Toast(getApplicationContext());
         toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.BOTTOM, 0, 200);
         toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(view);
+        toast.show();
+    }
+
+    public void toastError(String msg) {
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View view = layoutInflater.inflate(R.layout.custom_toast_error, (ViewGroup) findViewById(R.id.llCustomToastError));
+        TextView txtMensaje = view.findViewById(R.id.txtMensajeToast2);
+        txtMensaje.setText(msg);
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.BOTTOM, 0, 200);
+        toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(view);
         toast.show();
     }

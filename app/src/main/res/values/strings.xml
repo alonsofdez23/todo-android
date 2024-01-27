@@ -3,7 +3,8 @@
     <string name="titulo">ToDoList</string>
     <string name="hintCorreo">email</string>
     <string name="hintPass">Password</string>
-    <string name="login">Login</string>
+    <string name="loginEmail">Login con email</string>
+    <string name="loginGoogle">Login con Google</string>
     <string name="registro">Registrar</string>
     <string name="mas">mas</string>
     <string name="logout">logout</string>
